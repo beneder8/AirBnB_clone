@@ -1,9 +1,5 @@
 #!/usr/bin/python3
-"""
-Defines a class that will be the base for all the classes to
-be created in the AirBnB module.
-Defines the BaseModel class."""
-
+"""Defines the BaseModel class."""
 import models
 from uuid import uuid4
 from datetime import datetime
@@ -18,31 +14,6 @@ class BaseModel:
         Args:
             *args (any): Unused.
             **kwargs (dict): Key/value pairs of attributes.
-        """
-        if kwargs:
-            for name, value in kwargs.items():
-                if name != '__class__':
-                    if name == 'created_at' or name == 'updated_at':
-                        value = datetime.strptime(
-                            value, "%Y-%m-%dT%H:%M:%S.%f")
-                    setattr(self, name, value)
-        else:
-            self.id = str(uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = self.created_at
-            models.storage.new(self)
-
-    def __str__(self):
-        """
-            Returns the string representation of BaseModel
-        """
-        return "[{}]({}){}".format(self.__class__.__name__, self.id,
-                                   self.__dict__)
-
-    def save(self):
-        """
-            Updates the public instance attribute 'updated_at'
-            with the current time
         """
         tform = "%Y-%m-%dT%H:%M:%S.%f"
         self.id = str(uuid4())
@@ -63,17 +34,6 @@ class BaseModel:
         models.storage.save()
 
     def to_dict(self):
-        """
-            Returns the dictionary representation of the object
-        """
-        obj = {}
-        for key, value in self.__dict__.items():
-            if key == "created_at" or key == "updated_at":
-                obj[key] = value.isoformat()
-            else:
-                obj[key] = value
-        obj["__class__"] = self.__class__.__name__
-        return obj
         """Return the dictionary of the BaseModel instance.
 
         Includes the key/value pair __class__ representing
